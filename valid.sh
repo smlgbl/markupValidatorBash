@@ -5,6 +5,10 @@ if [ -z "$URLS" ]; then
 	exit 1
 fi
 
+if [ -z "$DIFF_OPTIONS" ]; then
+	DIFF_OPTIONS="-q -I '[[:digit:]]\+'"
+fi
+
 RETURN_VAL=0
 VALIDATOR_URL="http://validator.w3.org/check?uri="
 
@@ -26,7 +30,7 @@ do
         echo "Old file exists"
         if [ -e ./checked/${filename} ]; then
                 echo "New file exists as well. Diffing ..."
-                diff -q -I '[[:digit:]]\+' ./checked/${filename}.old ./checked/${filename}
+                diff $DIFF_OPTIONS ./checked/${filename}.old ./checked/${filename}
                 if [ $? == 1 ]; then
                 	cp ./checked/${filename} ./changed/;
 					RETURN_VAL=1
